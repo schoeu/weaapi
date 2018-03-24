@@ -29,8 +29,8 @@ let defaultBody = {
     data: {}
 };
 
-router.get('/api/weather', ctx => {
-    let data = callApi();
+router.get('/api/weather', async ctx => {
+    let data = await callApi();
     ctx.body = data;
 });
 
@@ -45,9 +45,8 @@ function callApi() {
                     let weathData = data[0];
                     let forecase = getForecast(weathData);
                     let realTime = getCurrentData(weathData);
-                    let rs = Object.assign({
-                        status: 0
-                    }, defaultBody, {
+                    let rs = Object.assign({}, {
+                        status: 0,
                         data: {
                             forecase: forecase,
                             real: realTime
