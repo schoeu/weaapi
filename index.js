@@ -9,7 +9,7 @@ const Router = require('koa-router');
 const json = require('koa-json')
 const request = require('request');
 const config = require('./config/conf');
-const router = new Router();
+let router = new Router();
 
 app
   .use(router.routes())
@@ -29,8 +29,8 @@ let defaultBody = {
     data: {}
 };
 
-router.get('/api/weather', async ctx => {
-    let data = await callApi();
+router.get('/api/weather', ctx => {
+    let data = callApi();
     ctx.body = data;
 });
 
@@ -48,8 +48,10 @@ function callApi() {
                     let rs = Object.assign({
                         status: 0
                     }, defaultBody, {
-                        forecase: forecase,
-                        real: realTime
+                        data: {
+                            forecase: forecase,
+                            real: realTime
+                        }
                     });
                     resolve(rs);
                 }
@@ -101,7 +103,6 @@ function getCurrentData(weathData = {}) {
 }
 
 let port = config.port || 3000;
-
 app.listen(port, () => {
     console.log(`Server is listned on ${port}`);
 })
